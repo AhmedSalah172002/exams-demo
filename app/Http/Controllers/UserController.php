@@ -16,24 +16,28 @@ class UserController extends Controller
     // User registration
     public function register(RegisterRequest $request)
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        // Create a new user
-        $user = User::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-        ]);
+            // Create a new user
+            $user = User::create([
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => $validated['role'],
+            ]);
 
 
-        $token = JWTAuth::fromUser($user);
+            $token = JWTAuth::fromUser($user);
 
-        return response()->json([
-            'message' => 'User registered successfully',
-            'user' => $user,
-            'token' => $token,
-        ], 201);
+            return response()->json([
+                'message' => 'User registered successfully',
+                'user' => $user,
+                'token' => $token,
+            ], 201);
+        }catch (\Exception $e){
+            return response()->json([['message'=>$e->getMessage()]],400);
+        }
     }
 
     // User login
