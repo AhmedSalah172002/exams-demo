@@ -20,6 +20,8 @@ class CustomFormRequest extends FormRequest
     {
         $errors = $validator->errors();
 
+
+
         throw new HttpResponseException(response()->json([
             'success' => false,
             'message' => 'Validation errors',
